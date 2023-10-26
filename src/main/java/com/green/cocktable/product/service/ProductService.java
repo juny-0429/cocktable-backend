@@ -37,4 +37,31 @@ public class ProductService {
                 .map(product -> modelMapper.map(product, ProductDTO.class))
                 .collect(Collectors.toList());
     }
+
+    /* 와인 상품 전체 조회 */
+    public List<ProductDTO> wineList() {
+        List<Product> category1Products = productRepository.findByCategoryCode("category2");
+
+        return category1Products.stream()
+                .map(product -> modelMapper.map(product, ProductDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    /* 칵테일 상품 전체 조회 */
+    public List<ProductDTO> foodList() {
+        List<Product> category1Products = productRepository.findByCategoryCode("category3");
+
+        return category1Products.stream()
+                .map(product -> modelMapper.map(product, ProductDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    /* 칵테일 상품 전체 조회 */
+    public List<ProductDTO> drinkList() {
+        List<Product> category1Products = productRepository.findByCategoryCode("category4");
+
+        return category1Products.stream()
+                .map(product -> modelMapper.map(product, ProductDTO.class))
+                .collect(Collectors.toList());
+    }
 }
