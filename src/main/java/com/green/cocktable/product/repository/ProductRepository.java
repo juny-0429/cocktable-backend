@@ -9,5 +9,5 @@ public interface ProductRepository extends JpaRepository<Product, String> {
 
     List<Product> findAll();
 
-    List<Product> findByCategoryCode(String categoryCode);
+    List<Product> findByCategoryCodeAndSalesYn(String categoryCode, char salesYn);
 }

@@ -41,7 +41,7 @@ public class ProductImage {
     private Date imageCreateDate;
 
     @Column(name = "PRODUCT_IMG_DELETE_YN")
-    private char imageDeleteYN;
+    private char imageDeleteYn;
 
     @ManyToOne
     @JoinColumn(name = "PRODUCT_CODE", insertable = false, updatable = false)
@@ -57,7 +57,7 @@ public class ProductImage {
                 ", imageType='" + imageType + '\'' +
                 ", imageLocation='" + imageLocation + '\'' +
                 ", imageCreateDate=" + imageCreateDate +
-                ", imageDeleteYN=" + imageDeleteYN +
+                ", imageDeleteYn=" + imageDeleteYn +
                 '}';
     }
 }

@@ -45,7 +45,7 @@ public class ProductService {
     /* 칵테일 상품 전체 조회 */
     public List<ProductDTO> cocktailList() {
 
-        List<Product> category1Products = productRepository.findByCategoryCode("category1");
+        List<Product> category1Products = productRepository.findByCategoryCodeAndSalesYn("category1",'Y');
 
         return category1Products.stream()
                 .map(product -> modelMapper.map(product, ProductDTO.class))
@@ -55,7 +55,7 @@ public class ProductService {
     /* 와인 상품 전체 조회 */
     public List<ProductDTO> wineList() {
 
-        List<Product> category2Products = productRepository.findByCategoryCode("category2");
+        List<Product> category2Products = productRepository.findByCategoryCodeAndSalesYn("category2",'Y');
 
         return category2Products.stream()
                 .map(product -> modelMapper.map(product, ProductDTO.class))
@@ -65,11 +65,11 @@ public class ProductService {
     /* 음식 상품 전체 조회 */
     public List<ProductDTO> foodList() {
 
-        List<Product> category3Products = productRepository.findByCategoryCode("category3");
+        List<Product> category3Products = productRepository.findByCategoryCodeAndSalesYn("category3", 'Y');
 
         List<ProductDTO> productDTOList = category3Products.stream()
                 .map(product -> {
-                    List<ProductImage> images = productImageRepository.findByProductCode(product.getProductCode());
+                    List<ProductImage> images = productImageRepository.findByProductCodeAndImageDeleteYn(product.getProductCode(), 'N');
 
                     // ProductDTO에 이미지 설정
                     ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
@@ -92,7 +92,7 @@ public class ProductService {
     /* 음료 상품 전체 조회 */
     public List<ProductDTO> drinkList() {
 
-        List<Product> category4Products = productRepository.findByCategoryCode("category4");
+        List<Product> category4Products = productRepository.findByCategoryCodeAndSalesYn("category4", 'Y');
 
         return category4Products.stream()
                 .map(product -> modelMapper.map(product, ProductDTO.class))
