@@ -2,6 +2,8 @@ package com.green.cocktable.product.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -15,7 +17,7 @@ public class ProductDTO {
     private String englishName;
     private int price;
     private String description;
-    private String image;
     private char salesYn;
     private char displayYn;
+    private List<ProductImageDTO> productIMGList;
 }

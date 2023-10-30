@@ -6,10 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,14 +37,15 @@ public class Product {
     @Column(name = "PRODUCT_DESCRIPTION")
     private String description;
 
-    @Column(name = "PRODUCT_IMAGE")
-    private String image;
-
     @Column(name = "SALES_YN")
     private char salesYn;
 
     @Column(name = "DISPLAY_YN")
     private char displayYn;
+
+    @OneToMany
+    @JoinColumn(name = "PRODUCT_CODE")
+    private List<ProductImage> productImages;
 
     @Override
     public String toString() {
@@ -57,9 +56,9 @@ public class Product {
                 ", englishName='" + englishName + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +
-                ", image='" + image + '\'' +
                 ", salesYn=" + salesYn +
                 ", displayYn=" + displayYn +
+                ", productImages=" + productImages +
                 '}';
     }
 }

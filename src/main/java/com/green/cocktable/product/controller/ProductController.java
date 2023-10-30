@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,11 +37,7 @@ public class ProductController {
     @GetMapping("/cocktail")
     public ResponseEntity<ResponseDTO> cocktailListAllPrint() {
 
-        System.out.println("여기는 작동하니??");
-
         List<ProductDTO> productList = productService.cocktailList();
-
-        System.out.println("데이터 확인 = " + productList);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공",(Object) productList));
     }
