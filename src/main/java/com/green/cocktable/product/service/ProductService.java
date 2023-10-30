@@ -43,7 +43,7 @@ public class ProductService {
             case "category3":
                 return "food/";
             case "category4":
-                return "DRINK/";
+                return "drink/";
             default:
                 return "unknown/";
         }
