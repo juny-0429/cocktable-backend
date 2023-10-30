@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhosml:3000")
-@RequestMapping("/menu")
+@RequestMapping("/api")
 public class ProductController {
 
     private final ProductService productService;
@@ -23,48 +23,11 @@ public class ProductController {
         this.productService = productService;
     }
 
+    @Operation(summary = "상품 리스트 조회 요청", description = "상품 리스트를 조회하여 가지고 옵니다.", tags = {"Product"})
+    @GetMapping("/productList/{categoryCode}")
+    public ResponseEntity<ResponseDTO> productListAllPrint(@PathVariable String categoryCode) {
 
-    @Operation(summary = "상품 전체 조회 요청", description = "전체 상품을 조회하여 가지고 옵니다.", tags = {"Product"})
-    @GetMapping("/test")
-    public ResponseEntity<ResponseDTO> productListAllPrint() {
-
-        List<ProductDTO> productList = productService.listAll();
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공",(Object) productList));
-    }
-
-    @Operation(summary = "칵테일 상품 조회 요청", description = "칵테일 상품을 조회하여 가지고 옵니다.", tags = {"Product"})
-    @GetMapping("/cocktail")
-    public ResponseEntity<ResponseDTO> cocktailListAllPrint() {
-
-        List<ProductDTO> productList = productService.cocktailList();
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공",(Object) productList));
-    }
-
-    @Operation(summary = "와인 상품 조회 요청", description = "와인 상품을 조회하여 가지고 옵니다.", tags = {"Product"})
-    @GetMapping("/wine")
-    public ResponseEntity<ResponseDTO> wineListAllPrint() {
-
-        List<ProductDTO> productList = productService.wineList();
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공",(Object) productList));
-    }
-
-    @Operation(summary = "음식 상품 조회 요청", description = "음식 상품을 조회하여 가지고 옵니다.", tags = {"Product"})
-    @GetMapping("/food")
-    public ResponseEntity<ResponseDTO> foodListAllPrint() {
-
-        List<ProductDTO> productList = productService.foodList();
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공",(Object) productList));
-    }
-
-    @Operation(summary = "음료 상품 조회 요청", description = "음료 상품을 조회하여 가지고 옵니다.", tags = {"Product"})
-    @GetMapping("/drink")
-    public ResponseEntity<ResponseDTO> drinkListAllPrint() {
-
-        List<ProductDTO> productList = productService.drinkList();
+        List<ProductDTO> productList = productService.productList(categoryCode);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공",(Object) productList));
     }

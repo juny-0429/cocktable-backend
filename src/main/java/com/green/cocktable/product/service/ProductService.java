@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
-
     private final ProductImageRepository productImageRepository;
 
     @Autowired
@@ -28,55 +27,42 @@ public class ProductService {
         this.productRepository = productRepository;
         this.productImageRepository = productImageRepository;
     }
-
     @Value("src/main/resources/static/productImage/food")
     private String FOOD_IMAGE_DIR;
 
-    @Value("http://localhost:8888/productImages/food/")
-    private String FOOD_IMAGE_URL;
+    @Value("http://localhost:8888/productImages/")
+    private String PRODUCT_IMAGE_URL;
 
-    public List<ProductDTO> listAll() {
-
-        List<Product> productList = productRepository.findAll();
-
-        return productList.stream().map(product -> modelMapper.map(product, ProductDTO.class)).collect(Collectors.toList());
+    private String getCategoryImageSubdirectory(String categoryCode) {
+        // 카테고리 코드를 기반으로 이미지 서브 디렉토리 결정
+        switch (categoryCode) {
+            case "category1":
+                return "cocktail/";
+            case "category2":
+                return "wine/";
+            case "category3":
+                return "food/";
+            case "category4":
+                return "DRINK/";
+            default:
+                return "unknown/";
+        }
     }
 
-    /* 칵테일 상품 전체 조회 */
-    public List<ProductDTO> cocktailList() {
+    /* 상품 리스트 조회 */
+    public List<ProductDTO> productList(String categoryCode) {
+        List<Product> ProductList = productRepository.findByCategoryCodeAndSalesYn(categoryCode, 'Y');
 
-        List<Product> category1Products = productRepository.findByCategoryCodeAndSalesYn("category1",'Y');
+        String imageUrl = PRODUCT_IMAGE_URL + getCategoryImageSubdirectory(categoryCode);
 
-        return category1Products.stream()
-                .map(product -> modelMapper.map(product, ProductDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    /* 와인 상품 전체 조회 */
-    public List<ProductDTO> wineList() {
-
-        List<Product> category2Products = productRepository.findByCategoryCodeAndSalesYn("category2",'Y');
-
-        return category2Products.stream()
-                .map(product -> modelMapper.map(product, ProductDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    /* 음식 상품 전체 조회 */
-    public List<ProductDTO> foodList() {
-
-        List<Product> category3Products = productRepository.findByCategoryCodeAndSalesYn("category3", 'Y');
-
-        List<ProductDTO> productDTOList = category3Products.stream()
+        List<ProductDTO> productDTOList = ProductList.stream()
                 .map(product -> {
                     List<ProductImage> images = productImageRepository.findByProductCodeAndImageDeleteYn(product.getProductCode(), 'N');
 
-                    // ProductDTO에 이미지 설정
                     ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
                     productDTO.setProductIMGList(images.stream()
                             .map(image -> {
-                                // 이미지 URL 합치기
-                                image.setImageLocation(FOOD_IMAGE_URL + image.getImageChangeName() + image.getImageType());
+                                image.setImageLocation(imageUrl + image.getImageChangeName() + image.getImageType());
                                 return modelMapper.map(image, ProductImageDTO.class);
                             })
                             .collect(Collectors.toList()));
@@ -86,16 +72,5 @@ public class ProductService {
                 .collect(Collectors.toList());
 
         return productDTOList;
-
-    }
-
-    /* 음료 상품 전체 조회 */
-    public List<ProductDTO> drinkList() {
-
-        List<Product> category4Products = productRepository.findByCategoryCodeAndSalesYn("category4", 'Y');
-
-        return category4Products.stream()
-                .map(product -> modelMapper.map(product, ProductDTO.class))
-                .collect(Collectors.toList());
     }
 }

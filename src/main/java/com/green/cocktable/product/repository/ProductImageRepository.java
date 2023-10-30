@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ProductImageRepository extends JpaRepository<ProductImage, String> {
 
-    /* 상품리스트 가져오기 (삭제 표시된 상품은 제외) */
+    /* 상품 이미지리스트 가져오기 (삭제 표시된 이미지는 제외) */
     List<ProductImage> findByProductCodeAndImageDeleteYn(String productCode, char imageDeleteYn);
 }
