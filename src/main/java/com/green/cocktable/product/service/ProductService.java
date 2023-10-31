@@ -1,9 +1,12 @@
 package com.green.cocktable.product.service;
 
+import com.green.cocktable.product.dto.ProductAndWineInfoDTO;
 import com.green.cocktable.product.dto.ProductDTO;
 import com.green.cocktable.product.dto.ProductImageDTO;
 import com.green.cocktable.product.entity.Product;
+import com.green.cocktable.product.entity.ProductAndWineInfo;
 import com.green.cocktable.product.entity.ProductImage;
+import com.green.cocktable.product.repository.ProductAndWineInfoRepository;
 import com.green.cocktable.product.repository.ProductImageRepository;
 import com.green.cocktable.product.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
@@ -21,11 +24,13 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductImageRepository productImageRepository;
 
+    private final ProductAndWineInfoRepository productAndWineInfoRepository;
     @Autowired
-    public ProductService(ModelMapper modelMapper, ProductRepository productRepository, ProductImageRepository productImageRepository) {
+    public ProductService(ModelMapper modelMapper, ProductRepository productRepository, ProductImageRepository productImageRepository, ProductAndWineInfoRepository productAndWineInfoRepository) {
         this.modelMapper = modelMapper;
         this.productRepository = productRepository;
         this.productImageRepository = productImageRepository;
+        this.productAndWineInfoRepository = productAndWineInfoRepository;
     }
     @Value("src/main/resources/static/productImage/food")
     private String FOOD_IMAGE_DIR;
@@ -51,11 +56,12 @@ public class ProductService {
 
     /* 상품 리스트 조회 */
     public List<ProductDTO> productList(String categoryCode) {
-        List<Product> ProductList = productRepository.findByCategoryCodeAndSalesYn(categoryCode, 'Y');
+
+        List<Product> productList = productRepository.findByCategoryCodeAndSalesYn(categoryCode, 'Y');
 
         String imageUrl = PRODUCT_IMAGE_URL + getCategoryImageSubdirectory(categoryCode);
 
-        List<ProductDTO> productDTOList = ProductList.stream()
+        List<ProductDTO> productDTOList = productList.stream()
                 .map(product -> {
                     List<ProductImage> images = productImageRepository.findByProductCodeAndImageDeleteYn(product.getProductCode(), 'N');
 
@@ -73,4 +79,31 @@ public class ProductService {
 
         return productDTOList;
     }
+
+    /* 와인 상품 리스트 조회 */
+    public List<ProductAndWineInfoDTO> wineList(String categoryCode) {
+
+        List<ProductAndWineInfo> wineList = productAndWineInfoRepository.findByCategoryCodeAndSalesYn(categoryCode, 'Y');
+
+        String imageUrl = PRODUCT_IMAGE_URL + getCategoryImageSubdirectory(categoryCode);
+
+        List<ProductAndWineInfoDTO> productDTOList = wineList.stream()
+                .map(product -> {
+                    List<ProductImage> images = productImageRepository.findByProductCodeAndImageDeleteYn(product.getProductCode(), 'N');
+
+                    ProductAndWineInfoDTO productAndWineInfoDTO = modelMapper.map(product, ProductAndWineInfoDTO.class);
+                    productAndWineInfoDTO.setProductIMGList(images.stream()
+                            .map(image -> {
+                                image.setImageLocation(imageUrl + image.getImageChangeName() + image.getImageType());
+                                return modelMapper.map(image, ProductImageDTO.class);
+                            })
+                            .collect(Collectors.toList()));
+
+                    return productAndWineInfoDTO;
+                })
+                .collect(Collectors.toList());
+
+        return productDTOList;
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.green.cocktable.product.controller;
 
+import com.green.cocktable.product.dto.ProductAndWineInfoDTO;
 import com.green.cocktable.product.dto.ProductDTO;
 import com.green.cocktable.product.service.ProductService;
 import com.green.cocktable.commons.ResponseDTO;
@@ -30,5 +31,14 @@ public class ProductController {
         List<ProductDTO> productList = productService.productList(categoryCode);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공",(Object) productList));
+    }
+
+    @Operation(summary = "와인 상품 리스트 조회 요청", description = "와인 상품 리스트를 조회하여 가지고 옵니다.", tags = {"Product"})
+    @GetMapping("/wineList/{categoryCode}")
+    public ResponseEntity<ResponseDTO> wineListAllPrint(@PathVariable String categoryCode) {
+
+        List<ProductAndWineInfoDTO> wineList = productService.wineList(categoryCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공",(Object) wineList));
     }
 }
